@@ -76,33 +76,80 @@ const restaurant = {
   ]
 };
 
-const commandesParTable = {};
+// const commandesParTable = {};
 
-restaurant.commandes.forEach(commande => {
-    const table = commande.table;
+// restaurant.commandes.forEach(commande => {
+//     const table = commande.table;
 
-    if(!commandesParTable[table]){
-        commandesParTable[table] = {
-            client:commande.client,
-            plats:[...commande.plats]
-        }
+//     if(!commandesParTable[table]){
+//         commandesParTable[table] = {
+//             client:commande.client,
+//             plats:[...commande.plats]
+//         }
+//     }
+//         else{
+//             commandesParTable[table].plats.push(...commande.plats);
+//     }
+// }
+// )
+
+// console.log(commandesParTable);
+
+// Object.keys(commandesParTable).forEach( numTable =>{
+
+//     const element = document.querySelector(`[data-num="${numTable}"]`);
+//     const subelem = document.querySelector(`[data-num="${numTable}"] > summary`);
+//     const client = document.createElement("p");
+//     const ul= document.createElement("ul");
+//     let totale=0;
+//     commandesParTable[numTable].plats.forEach(plat =>{
+//         const li = document.createElement("li");
+//         li.textContent = `${plat.nom} - ${plat.prix}€`;
+//         totale += plat.prix;
+//         ul.append(li);
+//     })
+//     totale.toFixed(2)
+//     subelem.textContent +=` ---- Totale: ${totale}€`;
+//     client.textContent =`Client: ${commandesParTable[numTable].client}`;
+//     element.append(client);
+
+//     element.append(ul);
+
+// })
+
+const commandeParTable = [];
+
+restaurant.commandes.forEach( commande => {
+  // console.log(commande);
+  const table = commande.table;
+  // console.log(commande.table);
+  if(!commandeParTable[table]){
+    
+    commandeParTable[table] = {
+      client : commande.client,
+      plats : commande.plats.slice()//important sinon  on ne cree pas de copie mais on pointe vers le meme tableau
     }
-        else{
-            commandesParTable[table].plats.push(...commande.plats);
-    }
-}
-)
+  }else{
+    commande.plats.forEach(plat =>{
+      commandeParTable[table].plats.push(plat);
+    })
+  }
+  console.log("Etat au moment du log:", JSON.stringify(commandeParTable[table]));
 
-console.log(commandesParTable);
+  
+});
 
-Object.keys(commandesParTable).forEach( numTable =>{
 
-    const element = document.querySelector(`[data-num="${numTable}"]`);
-    const subelem = document.querySelector(`[data-num="${numTable}"] > summary`);
+commandeParTable.forEach( (table, index) =>{
+  console.log(index);
+    const element = document.querySelector(`[data-num="${index }"]`);
+    const subelem = document.querySelector(`[data-num="${index }"] > summary`);
+    console.log(element);
+    console.log(subelem);
     const client = document.createElement("p");
     const ul= document.createElement("ul");
     let totale=0;
-    commandesParTable[numTable].plats.forEach(plat =>{
+    table.plats.forEach(plat =>{
         const li = document.createElement("li");
         li.textContent = `${plat.nom} - ${plat.prix}€`;
         totale += plat.prix;
@@ -110,7 +157,7 @@ Object.keys(commandesParTable).forEach( numTable =>{
     })
     totale.toFixed(2)
     subelem.textContent +=` ---- Totale: ${totale}€`;
-    client.textContent =`Client: ${commandesParTable[numTable].client}`;
+    client.textContent =`Client: ${table.client}`;
     element.append(client);
 
     element.append(ul);
